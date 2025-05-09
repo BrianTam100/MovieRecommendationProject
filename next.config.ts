@@ -4,4 +4,11 @@ const nextConfig = {
   reactStrictMode: true,
 };
 
-module.exports = nextConfig;
+export default nextConfig;
+
+
+module.exports = {
+  images: {
+    domains: ['image.tmdb.org'], // Add image.tmdb.org to the list of allowed domains
+  },
+};

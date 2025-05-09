@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
+import Image from 'next/image'
 import axios from 'axios';
 import './globals.css';
 type Actors = {
@@ -7,9 +8,27 @@ type Actors = {
     character: string;
     id: number;
   };
+
+type Genre = {
+name: string;
+};
+
+
+type Details = {
+  name: string
+  number_of_seasons: number
+  first_air_date: string
+  in_production: boolean
+  last_air_date: string
+  title: string
+  poster_path: string
+  overview: string
+  genres: Genre[]
+}
+
 const TelevisionDetails = () => {
   const router = useRouter();
-  const [details, setDetails] = useState<any>(null); 
+  const [details, setDetails] = useState<Details>(); 
   const [cast, setCast] = useState<Actors[]>([]); 
   const { id } = router.query;
   
@@ -57,10 +76,10 @@ const TelevisionDetails = () => {
         >Home</button>
       </div>
       <h1 className="text-3xl font-bold ml-[20%]">{details.name}</h1>
-      <h2 className="text-1xl font-bold ml-[20%]">{details.number_of_seasons} Seasons | {details.first_air_date.slice(0, 4)} - {details.in_production != true ? details.last_air_date.slice(0, 4): "Present"} | {details.genres.map(g => g.name).join(', ')}
+      <h2 className="text-1xl font-bold ml-[20%]">{details.number_of_seasons} Seasons | {details.first_air_date.slice(0, 4)} - {details.in_production != true ? details.last_air_date.slice(0, 4): "Present"} | {details.genres.map((g:Genre) => g.name).join(', ')}
       </h2>
 
-      <img
+      <Image
         src={`https://image.tmdb.org/t/p/original/${details.poster_path}`}
         alt={details.title}
         className="w-2/5 max-w-md rounded-lg object-cover ml-[20%]"

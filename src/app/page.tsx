@@ -1,21 +1,11 @@
 'use client';
 
-import SearchBar from "./SearchBar";
-import React, { useState } from "react";
 import UpcomingMovies from "./UpcomingMovies";
 import PopularMovies from "./PopularMovies";
 import TopTelevision from "./TopTelevision"
 import './globals.css';
-type Movie = {
-  id: number;
-  title: string;
-};
 
 export default function Home() {
-  const [movies, setMovies] = useState<Movie[]>([]); 
-  const [showMovies, setShowMovies] = useState(true); 
-
-
   return (
     <div className="min-h-screen flex flex-col bg-black">
       <div className="flex items-center bg-black flex-col py-12">

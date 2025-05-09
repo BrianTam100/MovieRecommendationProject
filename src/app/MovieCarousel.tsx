@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
-
+import Image from 'next/image'
 type Movie = {
   id: number;
   title: string;
@@ -39,7 +39,7 @@ const MovieCarousel = ({ movies, moviesPerPage, category }: MovieCarouselProps) 
             style={{ width: 'calc((100% - 9 * 0.5rem) / 10)' }}
           >
             <Link href={`/${category}/${movie.id}`}>
-              <img
+              <Image
                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                 className="w-full h-auto object-cover rounded"
                 alt={movie.title}
