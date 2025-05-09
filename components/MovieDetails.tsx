@@ -51,7 +51,7 @@ const MovieDetails = ({ category }: MediaType) => {
   const [trailer, setTrailer] = useState<{ results: Trailer[] } | null>(null);
   const { id } = router.query;
   
-  const API_KEY = 'your-api-key';
+  const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
 
   useEffect(() => {
     if (!id) return;
@@ -150,6 +150,8 @@ const MovieDetails = ({ category }: MediaType) => {
           src={`https://image.tmdb.org/t/p/original/${details.poster_path}`}
           alt={details.title}
           className="w-3/5 max-w-md rounded-lg object-cover"
+          width={300}  // specify the width
+          height={450} // specify the height
         />
         <iframe
           width="800"

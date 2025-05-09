@@ -83,6 +83,8 @@ const TelevisionDetails = () => {
         src={`https://image.tmdb.org/t/p/original/${details.poster_path}`}
         alt={details.title}
         className="w-2/5 max-w-md rounded-lg object-cover ml-[20%]"
+        width={300}  
+        height={450} 
       />
       <p className = "ml-[20%]">Starring  
       {cast.slice(0, 3).map((member) => (

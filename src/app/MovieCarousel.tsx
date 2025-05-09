@@ -43,6 +43,8 @@ const MovieCarousel = ({ movies, moviesPerPage, category }: MovieCarouselProps) 
                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                 className="w-full h-auto object-cover rounded"
                 alt={movie.title}
+                width={300}  // specify the width
+                height={450} // specify the height
               />
             </Link>
           </li>
