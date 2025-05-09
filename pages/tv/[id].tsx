@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import TelevisionDetails from '../../src/app/TelevisionDetails';  
 
@@ -5,9 +6,31 @@ const TvPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  if (!id || typeof id !== 'string') return <p>Loading...</p>;
+  // Check if the 'id' is a valid string or has changed
+  const [hashId, setHashId] = useState<string | null>(null);
 
-  return <TelevisionDetails id={id} />;
+  useEffect(() => {
+    // Check if there's a hash in the URL and update state accordingly
+    if (window.location.hash) {
+      const hashIdFromUrl = window.location.hash.slice(1); // Get the part after '#'
+      setHashId(hashIdFromUrl);
+    }
+
+    const handleHashChange = () => {
+      const hashIdFromUrl = window.location.hash.slice(1);
+      setHashId(hashIdFromUrl);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
+  if (!hashId || typeof hashId !== 'string') return <p>Loading...</p>;
+
+  return <TelevisionDetails id={hashId} />;
 };
 
 export default TvPage;
