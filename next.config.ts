@@ -15,4 +15,6 @@ module.exports = {
   },
   basePath: '/MovieRecommendationProject',  
   assetPrefix: '/MovieRecommendationProject', 
+  trailingSlash: true,  
+  exportTrailingSlash: true, 
 };
