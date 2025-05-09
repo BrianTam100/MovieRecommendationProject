@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
-import Image from 'next/image';
+import Image from 'next/image'
 import axios from 'axios';
 import './globals.css';
 
@@ -44,16 +44,17 @@ interface MediaType {
 
 const MovieDetails = ({ category }: MediaType) => {
   const router = useRouter();
+  
   const [details, setDetails] = useState<MediaDetails | null>(null); 
   const [cast, setCast] = useState<Actor[]>([]); 
   const [releaseDates, setReleaseDates] = useState<ReleaseDate[] | null>(null);
   const [trailer, setTrailer] = useState<{ results: Trailer[] } | null>(null);
-  const { id } = router.query; // Dynamically fetch the id
-
-  const API_KEY = 'your-api-key-here';  // Replace with your API Key
+  const { id } = router.query;
+  
+  const API_KEY = 'your-api-key';
 
   useEffect(() => {
-    if (!id) return;  // Wait for `id` to be available
+    if (!id) return;
 
     const fetchDetails = async () => {
       const type = category === "tv" ? "tv" : "movie";
