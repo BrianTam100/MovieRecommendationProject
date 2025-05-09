@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import TelevisionDetails from '../../src/app/TelevisionDetails';  
 
 const TvPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
-
   // Check if the 'id' is a valid string or has changed
   const [hashId, setHashId] = useState<string | null>(null);
 

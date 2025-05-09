@@ -25,7 +25,7 @@ const MoviePage = () => {
 
   if (!hashId || !hashCategory) return null;
 
-  return <MovieDetails category={hashCategory} id={hashId} />;
+  return <MovieDetails category={hashCategory} />; 
 };
 
 export default MoviePage;
