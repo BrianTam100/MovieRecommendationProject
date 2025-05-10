@@ -78,7 +78,7 @@ const TelevisionDetails = () => {
       <h1 className="text-3xl font-bold ml-[20%]">{details.name}</h1>
       <h2 className="text-1xl font-bold ml-[20%]">{details.number_of_seasons} Seasons | {details.first_air_date.slice(0, 4)} - {details.in_production != true ? details.last_air_date.slice(0, 4): "Present"} | {details.genres.map((g:Genre) => g.name).join(', ')}
       </h2>
-
+      <div className = "flex">
       <Image
         src={`https://image.tmdb.org/t/p/original/${details.poster_path}`}
         alt={details.title}
@@ -86,13 +86,18 @@ const TelevisionDetails = () => {
         width={300}  // specify the width
         height={450} // specify the height
       />
-      <p className = "ml-[20%]">Starring  
-      {cast.slice(0, 3).map((member) => (
-          <span key={member.id}> {member.name}, </span>
-        ))}
-      </p>
-      <p className="max-w-xl text-lg ml-[20%]">{details.overview}</p>
+      <div className="">
 
+      <h1 className="max-w-2xl text-lg m-4">{details.overview}</h1>
+      <p className="m-4">
+      Starring
+      {cast.slice(0, 3).map((member, index) => (
+        <span key={member.id}> {member.name}{index < cast.slice(0, 3).length - 1 && ", "}
+        </span>
+      ))}
+      </p>
+      </div>
+    </div>
     </div>
   );
 }

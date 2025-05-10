@@ -141,7 +141,7 @@ const MovieDetails = ({ category }: MediaType) => {
         {details.runtime > 0
           ? `${Math.floor(details.runtime / 60)} ${
               Math.floor(details.runtime / 60) > 1 ? 'hours' : 'hour'
-            } ${details.runtime % 60} minutes`
+            } ${details.runtime % 60 - 1} minutes`
           : 'Runtime: Unknown'}
       </h2>
 
@@ -166,11 +166,12 @@ const MovieDetails = ({ category }: MediaType) => {
       <p className="max-w-2xl text-lg ml-[20%]">{details.overview}</p>
       <div className="ml-[20%]"></div>
       <p className="ml-[20%]">
-        Starring
-        {cast.slice(0, 3).map((member) => (
-          <span key={member.id}> {member.name}, </span>
-        ))}
-      </p>
+      Starring
+      {cast.slice(0, 3).map((member, index) => (
+        <span key={member.id}> {member.name}{index < cast.slice(0, 3).length - 1 && ", "}
+        </span>
+      ))}
+    </p>
     </div>
   );
 };
