@@ -129,7 +129,7 @@ return (
 
         <h2 className="text-lg font-semibold mb-2">Current Season</h2>
         <div className="flex items-center gap-4">
-          <h3 className="font-bold text-md">Season {details.number_of_seasons}</h3>
+          <h3 className="font-bold text-md">{currentSeason?.name}</h3>
         </div>
       </div>
     </div>
