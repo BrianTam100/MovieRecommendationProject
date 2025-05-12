@@ -124,8 +124,10 @@ const MovieDetails = ({ category }: MediaType) => {
   );
   console.log(actualTrailer?.key);
 
+  
+
   return (
-    <div className="bg-gray-800 min-h-screen p-8 text-white">
+      <div className="min-h-screen p-8 text-white bg-gradient-to-r from-gray-700 via-black to-gray-700">
       <div>
         <button
           className="bg-white hover:bg-orange-700 text-gray-700 font-bold py-2 px-4 rounded"
@@ -173,6 +175,7 @@ const MovieDetails = ({ category }: MediaType) => {
       ))}
     </p>
     </div>
+
   );
 };
 

@@ -112,7 +112,7 @@ return (
     <h2 className="text-md font-semibold ml-[20%] mb-4">
       {details.number_of_seasons} Seasons | {details.first_air_date.slice(0, 4)} -{' '}
       {details.in_production ? 'Present' : details.last_air_date.slice(0, 4)} |{' '}
-      {details.genres.map((g: Genre) => g.name).join(', ')}
+      {details.genres.map((g: Genre) => g.name).join(', ')} | TV Series
     </h2>
 
     <div className="flex ml-[20%] gap-8">
@@ -126,11 +126,6 @@ return (
       <div className="max-w-xl">
         <h1 className="text-lg font-semibold mb-2">Overview</h1>
         <p className="mb-6">{details.overview}</p>
-
-        <h2 className="text-lg font-semibold mb-2">Current Season</h2>
-        <div className="flex items-center gap-4">
-          <h3 className="font-bold text-md">{currentSeason?.name}</h3>
-        </div>
       </div>
     </div>
 
