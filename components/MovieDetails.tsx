@@ -8,6 +8,8 @@ type Actor = {
   name: string;
   character: string;
   id: number;
+  job: string;
+  department: string;
 };
 
 type Genre = {
@@ -47,6 +49,7 @@ const MovieDetails = ({ category }: MediaType) => {
   
   const [details, setDetails] = useState<MediaDetails | null>(null); 
   const [cast, setCast] = useState<Actor[]>([]); 
+  const [credits, setCredits] = useState<Actor[]>([]);
   const [releaseDates, setReleaseDates] = useState<ReleaseDate[] | null>(null);
   const [trailer, setTrailer] = useState<{ results: Trailer[] } | null>(null);
   const { id } = router.query;
@@ -78,7 +81,14 @@ const MovieDetails = ({ category }: MediaType) => {
             Authorization: `Bearer ${API_KEY}`,
         }
       });
+      const crewResponse = await axios.get<{ crew: Actor[] }>(`https://api.themoviedb.org/3/${type}/${id}/credits`, {
+        headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${API_KEY}`,
+        }
+      });
       setCast(creditsResponse.data.cast);
+      setCredits(crewResponse.data.crew);
       console.log('Fetched Cast', creditsResponse.data);
 
       const releaseDatesResponse = await axios.get<{ results: ReleaseDate[] }>(`https://api.themoviedb.org/3/${type}/${id}/release_dates`, {
@@ -123,7 +133,7 @@ const MovieDetails = ({ category }: MediaType) => {
       item.iso_3166_1 === "US"
   );
   console.log(actualTrailer?.key);
-
+  const producer = credits.find((member) => member.job === "Director" && member.department == "Directing");
   
 
   return (
@@ -173,6 +183,11 @@ const MovieDetails = ({ category }: MediaType) => {
         <span key={member.id}> {member.name}{index < cast.slice(0, 3).length - 1 && ", "}
         </span>
       ))}
+    </p>
+    <p
+    className = "ml-[20%]"
+    >
+    Director: {producer?.name}
     </p>
     </div>
 
