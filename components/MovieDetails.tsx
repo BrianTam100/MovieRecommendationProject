@@ -44,10 +44,6 @@ interface MediaType {
   category: string;
 }
 
-type Person = {
-  name: string;
-  biography: string;
-}
 
 const MovieDetails = ({ category }: MediaType) => {
   const router = useRouter();
