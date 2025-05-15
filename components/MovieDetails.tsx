@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from 'next/image'
 import axios from 'axios';
 import './globals.css';
-
+import Link from 'next/link';
 type Actor = {
   name: string;
   character: string;
@@ -44,6 +44,11 @@ interface MediaType {
   category: string;
 }
 
+type Person = {
+  name: string;
+  biography: string;
+}
+
 const MovieDetails = ({ category }: MediaType) => {
   const router = useRouter();
   
@@ -52,6 +57,7 @@ const MovieDetails = ({ category }: MediaType) => {
   const [credits, setCredits] = useState<Actor[]>([]);
   const [releaseDates, setReleaseDates] = useState<ReleaseDate[] | null>(null);
   const [trailer, setTrailer] = useState<{ results: Trailer[] } | null>(null);
+  const [producer, setProducer] = useState<Actor | null>(null);
   const { id } = router.query;
   
   const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
@@ -108,10 +114,28 @@ const MovieDetails = ({ category }: MediaType) => {
       });
       setTrailer(trailerResponse.data);
       console.log('Fetched Trailer', trailerResponse.data);
+      
     };
     
     fetchDetails(); 
   }, [id, category]);
+  useEffect(() => {
+  const fetchDetails2 = async () => {
+    if (!credits || credits.length === 0) return;
+
+    const director = credits.find(
+      (member) => member.job === "Director" && member.department === "Directing"
+    );
+    
+    if (!director) return;
+    setProducer(director);
+    console.log("Director ID being used:", director?.id);
+  };
+
+  fetchDetails2();
+}, [credits]);
+
+
 
   if (!details) return <p className="text-center p-4">Loading...</p>;
 
@@ -133,14 +157,12 @@ const MovieDetails = ({ category }: MediaType) => {
       item.iso_3166_1 === "US"
   );
   console.log(actualTrailer?.key);
-  const producer = credits.find((member) => member.job === "Director" && member.department == "Directing");
-  
 
   return (
-      <div className="min-h-screen p-8 text-white bg-gradient-to-r from-gray-700 via-black to-gray-700">
+      <div className="min-h-screen p-8 text-white bg-gradient-to-r from-gray-950 via-slate-800 to-gray-950">
       <div>
         <button
-          className="bg-white hover:bg-orange-700 text-gray-700 font-bold py-2 px-4 rounded"
+          className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded"
           onClick={() => router.push('/')}
         >
           Home
@@ -157,40 +179,46 @@ const MovieDetails = ({ category }: MediaType) => {
           : 'Runtime: Unknown'}
       </h2>
 
-      <div className="flex gap-8 ml-[20%]">
-        <Image
-          src={`https://image.tmdb.org/t/p/original/${details.poster_path}`}
-          alt={details.title}
-          className="w-3/5 max-w-md rounded-lg object-cover"
-          width={300}  // specify the width
-          height={450} // specify the height
-        />
-        <iframe
-          width="800"
-          height="700"
-          src={`https://www.youtube.com/embed/${actualTrailer?.key}`}
-          title="YouTube trailer"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="rounded-lg"
-        ></iframe>
+      <div className="ml-[20%]">
+        <div className="flex gap-8">
+          <Image
+            src={`https://image.tmdb.org/t/p/original/${details.poster_path}`}
+            alt={details.title}
+            className="w-3/5 max-w-md rounded-lg object-cover"
+            width={300}
+            height={450}
+          />
+          <iframe
+            width="800"
+            height="700"
+            src={`https://www.youtube.com/embed/${actualTrailer?.key}`}
+            title="YouTube trailer"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="rounded-lg"
+          ></iframe>
+        </div>
+        <p className="w-4/5 text-lg mt-8">{details.overview}</p>
       </div>
-      <p className="max-w-2xl text-lg ml-[20%]">{details.overview}</p>
       <div className="ml-[20%]"></div>
-      <p className="ml-[20%]">
+      <p className="ml-[20%] m-4">
+      Director: 
+      <Link href={`/person/${producer?.id}`} className="text-sky-400 hover:underline ml-1">
+        {producer?.name}
+      </Link>
+    </p>
+
+
+
+    <p className="ml-[20%]">
       Starring
       {cast.slice(0, 3).map((member, index) => (
         <span key={member.id}> {member.name}{index < cast.slice(0, 3).length - 1 && ", "}
         </span>
       ))}
     </p>
-    <p
-    className = "ml-[20%]"
-    >
-    Director: {producer?.name}
-    </p>
     </div>
-
+    
   );
 };
 
