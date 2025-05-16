@@ -39,6 +39,7 @@ interface MediaDetails {
   poster_path: string;
   overview: string;
   vote_average: number;
+  release_date: number;
 }
 
 interface MediaType {
@@ -167,7 +168,7 @@ const MovieDetails = ({ category }: MediaType) => {
       </div>
       <h1 className="text-4xl font-bold ml-[20%]">{details.title}</h1>
       <h2 className="text-1xl font-bold ml-[20%]">
-        {usReleaseDate?.slice(0, 10)} | {usCertification} |{" "}
+        {usReleaseDate?.slice(0, 10) || details.release_date} | {usCertification} |{" "}
         {details.genres.map((g) => g.name).join(', ')} |{" "}
         {details.runtime > 0
           ? `${Math.floor(details.runtime / 60)} ${
