@@ -149,12 +149,20 @@ const MovieDetails = ({ category }: MediaType) => {
 
   const actualTrailer = trailer?.results.find(
     (item) =>
-      item.name.toLowerCase().includes("official") &&
       item.name.toLowerCase().includes("trailer") &&
       item.site === "YouTube" &&
       item.iso_3166_1 === "US"
   );
   console.log(actualTrailer?.key);
+
+  const writer = credits.filter((member) => member.department === "Writing");
+  const seen = new Set();
+  const unique = writer.filter(member=> {
+    if(seen.has(member.id)) return false;
+    seen.add(member.id);
+    return true;
+  });
+  console.log('writer', unique);
 
   return (
       <div className="min-h-screen p-8 text-white bg-gradient-to-r from-gray-950 via-slate-800 to-gray-950">
@@ -200,18 +208,37 @@ const MovieDetails = ({ category }: MediaType) => {
       </div>
       <div className="ml-[20%]"></div>
       <p className="ml-[20%] m-4">
-      Director: 
+      Directed by: 
       <Link href={`/person/${producer?.id}`} className="text-sky-500 hover:underline ml-1">
-        {producer?.name}
+        {producer?.name} 
       </Link>
+      </p>
+      <p className="ml-[20%] m-4">
+      Written by:{" "}
+      {unique.slice(0, 3).map((writer, index) => (
+        <span key={writer.id}>
+          <Link
+            href={`/person/${writer.id}`}
+            className="text-sky-500"
+          >
+            {writer.name}
+          </Link>
+          {index < 2 && " · " && unique.length > 1}
+        </span>
+      ))}
     </p>
 
-
-
     <p className="ml-[20%]">
-      Starring
+      Starring: {" "}
       {cast.slice(0, 3).map((member, index) => (
-        <span key={member.id}> {member.name}{index < cast.slice(0, 3).length - 1 && ", "}
+        <span key={member.id}> 
+        <Link
+          href = {`/person/${member.id}`}
+          className = "text-sky-500"
+        >
+        {member.name}
+        </Link>
+        {index < cast.slice(0, 3).length - 1 && " · "}
         </span>
       ))}
     </p>
