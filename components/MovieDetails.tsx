@@ -38,6 +38,7 @@ interface MediaDetails {
   runtime: number;
   poster_path: string;
   overview: string;
+  vote_average: number;
 }
 
 interface MediaType {
@@ -164,7 +165,7 @@ const MovieDetails = ({ category }: MediaType) => {
           Home
         </button>
       </div>
-      <h1 className="text-3xl font-bold ml-[20%]">{details.title}</h1>
+      <h1 className="text-4xl font-bold ml-[20%]">{details.title}</h1>
       <h2 className="text-1xl font-bold ml-[20%]">
         {usReleaseDate?.slice(0, 10)} | {usCertification} |{" "}
         {details.genres.map((g) => g.name).join(', ')} |{" "}
@@ -172,7 +173,7 @@ const MovieDetails = ({ category }: MediaType) => {
           ? `${Math.floor(details.runtime / 60)} ${
               Math.floor(details.runtime / 60) > 1 ? 'hours' : 'hour'
             } ${details.runtime % 60 - 1} minutes`
-          : 'Runtime: Unknown'}
+          : 'Runtime: Unknown'} | Rating: {details.vote_average.toFixed(1)}/10 
       </h2>
 
       <div className="ml-[20%]">
@@ -199,7 +200,7 @@ const MovieDetails = ({ category }: MediaType) => {
       <div className="ml-[20%]"></div>
       <p className="ml-[20%] m-4">
       Director: 
-      <Link href={`/person/${producer?.id}`} className="text-sky-400 hover:underline ml-1">
+      <Link href={`/person/${producer?.id}`} className="text-sky-500 hover:underline ml-1">
         {producer?.name}
       </Link>
     </p>

@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import "./globals.css"
+import Image from 'next/image'
 type Person = {
   name: string;
   biography: string;
+  profile_path: string;
 }
 
 const PersonDetails = () => {
@@ -36,8 +39,25 @@ const PersonDetails = () => {
   
 
   return (
-    <div>
-    <h2>{person?.biography}</h2>
+    <div className = "min-h-screen p-8 text-white bg-gradient-to-r from-gray-950 via-slate-800 to-gray-950">
+    <button
+        className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded"
+        onClick={() => router.push('/')}
+      >
+        Home
+      </button>
+    <h1 className = "w-3/5 text-bold text-4xl ml-[20%]"
+    >{person?.name}</h1>
+    <Image
+      src={`https://image.tmdb.org/t/p/original/${person?.profile_path}`}
+      alt=""
+      className="w-1/5 max-w-md rounded-lg object-cover ml-[20%] m-4"
+      width={300}
+      height={450}
+    />
+    <h2 className='ml-[20%] w-3/5'>
+      {person?.biography}
+    </h2>
     </div>
 
   );
