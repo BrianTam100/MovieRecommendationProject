@@ -223,7 +223,7 @@ const MovieDetails = ({ category }: MediaType) => {
           >
             {writer.name}
           </Link>
-          {index < 2 && " · " && unique.length > 1}
+          {index < unique.slice(0, 3).length - 1 && " · " }
         </span>
       ))}
     </p>

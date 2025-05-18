@@ -7,10 +7,8 @@ import './globals.css';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-black">
-      <div className="flex items-center bg-black flex-col py-12">
-        <h1 className="text-4xl mb-4 text-white">Movie Recommendations</h1>
-      </div>
+  <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-800 via-gray-950 to-slate-800 text-white">
+      <h1 className="text-4xl mb-4 text-white text-center m-16">Movie Recommendations</h1>
       <div className="flex bg-grey-800 mb-8">
       <UpcomingMovies />
       </div>
