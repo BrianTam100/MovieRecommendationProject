@@ -28,11 +28,12 @@ const UpcomingMovies = () => {
   const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
 
   useEffect(() => {
-    const fetchUpcomingMovies = async () => {
-      const filteredMovies: Movie[] = [];
-      let count = 1;
-      while(filteredMovies.length < 20){
-        try {
+  const fetchUpcomingMovies = async () => {
+    const filteredMovies: Movie[] = [];
+    let count = 1;
+
+    while (filteredMovies.length < 20) {
+      try {
         const movieRes = await axios.get<{ results: Movie[] }>(
           `https://api.themoviedb.org/3/movie/upcoming?page=${count}`,
           {
@@ -46,15 +47,23 @@ const UpcomingMovies = () => {
         const todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
 
-        for (const movie of movieRes.data.results) {
-          const releaseDateRes = await axios.get<{ results: ReleaseDate[] }>(`https://api.themoviedb.org/3/movie/${movie.id}/release_dates`,
+        const releaseDatePromises = movieRes.data.results.map(movie =>
+          axios.get<{ results: ReleaseDate[] }>(
+            `https://api.themoviedb.org/3/movie/${movie.id}/release_dates`,
             {
               headers: {
                 accept: 'application/json',
                 Authorization: `Bearer ${API_KEY}`,
               },
             }
-          );
+          )
+        );
+
+        const releaseDateResponses = await Promise.all(releaseDatePromises);
+
+        for (let i = 0; i < movieRes.data.results.length; i++) {
+          const movie = movieRes.data.results[i];
+          const releaseDateRes = releaseDateResponses[i];
 
           const { usReleaseDate } = getReleaseInfo(releaseDateRes.data.results) || {};
 
@@ -67,19 +76,21 @@ const UpcomingMovies = () => {
             }
           }
         }
+
         ++count;
 
       } catch (error) {
         console.error("Error fetching upcoming movies or release dates:", error);
+        break; // prevent infinite loop on failure
       }
-      }
-      setMovies(filteredMovies);
+    }
 
-      
-    };
+    setMovies(filteredMovies.slice(0, 20)); // ensure exactly 20
+  };
 
-    fetchUpcomingMovies();
-  }, []);
+  fetchUpcomingMovies();
+}, []);
+
 
   return (
     <div>
