@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import MovieCarousel from './MovieCarousel';
 import { getReleaseInfo } from "../../components/releaseDate";
-import { filter } from "framer-motion/client";
 
 type Movie = {
   id: number;
