@@ -39,7 +39,16 @@ const PopularMovies = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-white">Popular Movies</h2>
+     <div className="flex items-center gap-4">
+      <h2 className="text-xl font-semibold text-white">
+        Popular Movies
+      </h2>
+      <button
+        className="m-1 ml-auto px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white"
+      >
+        View all
+      </button>
+      </div>
       <MovieCarousel movies={movies} moviesPerPage={moviesPerPage} category="movies" />
     </div>
   );

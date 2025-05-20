@@ -4,6 +4,7 @@ import Image from 'next/image'
 import axios from 'axios';
 import './globals.css';
 import Link from 'next/link';
+import { getReleaseInfo } from './releaseDate';
 type Actor = {
   name: string;
   character: string;
@@ -112,7 +113,7 @@ const MovieDetails = ({ category }: MediaType) => {
       });
       setTrailer(trailerResponse.data);
       console.log('Fetched Trailer', trailerResponse.data);
-      
+
     };
     
     fetchDetails(); 
@@ -137,15 +138,6 @@ const MovieDetails = ({ category }: MediaType) => {
 
   if (!details) return <p className="text-center p-4">Loading...</p>;
 
-  const usRelease = releaseDates?.find((region) => region.iso_3166_1 === 'US');
-  
-  const certifiedRelease = usRelease?.release_dates.find(
-    (entry) => entry.certification?.trim() !== '' && entry.note?.trim() === ""
-  );
-  const fallbackRelease = usRelease?.release_dates[0];
-
-  const usReleaseDate = (certifiedRelease || fallbackRelease)?.release_date;
-  const usCertification = certifiedRelease?.certification || 'Unrated';
 
   const actualTrailer = trailer?.results.find(
     (item) =>
@@ -163,6 +155,8 @@ const MovieDetails = ({ category }: MediaType) => {
     return true;
   });
   console.log('writer', unique);
+  const { usReleaseDate, usCertification } = releaseDates ? getReleaseInfo(releaseDates) : { usReleaseDate: null, usCertification: null };
+
 
   return (
       <div className="min-h-screen p-8 text-white bg-gradient-to-r from-gray-950 via-slate-800 to-gray-950">
