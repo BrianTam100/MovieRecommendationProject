@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import MovieCarousel from './MovieCarousel';
 import { getReleaseInfo } from "../../components/releaseDate";
+import { filter } from "framer-motion/client";
 
 type Movie = {
   id: number;
@@ -29,9 +30,12 @@ const UpcomingMovies = () => {
 
   useEffect(() => {
     const fetchUpcomingMovies = async () => {
-      try {
+      const filteredMovies: Movie[] = [];
+      let count = 1;
+      while(filteredMovies.length < 20){
+        try {
         const movieRes = await axios.get<{ results: Movie[] }>(
-          'https://api.themoviedb.org/3/movie/upcoming?page=1',
+          `https://api.themoviedb.org/3/movie/upcoming?page=${count}`,
           {
             headers: {
               accept: 'application/json',
@@ -42,8 +46,6 @@ const UpcomingMovies = () => {
 
         const todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
-
-        const filteredMovies: Movie[] = [];
 
         for (const movie of movieRes.data.results) {
           const releaseDateRes = await axios.get<{ results: ReleaseDate[] }>(`https://api.themoviedb.org/3/movie/${movie.id}/release_dates`,
@@ -66,11 +68,15 @@ const UpcomingMovies = () => {
             }
           }
         }
+        ++count;
 
-        setMovies(filteredMovies);
       } catch (error) {
         console.error("Error fetching upcoming movies or release dates:", error);
       }
+      }
+      setMovies(filteredMovies);
+
+      
     };
 
     fetchUpcomingMovies();
