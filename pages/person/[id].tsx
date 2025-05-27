@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import "./globals.css"
+import '../../components/globals.css'
 import Image from 'next/image'
 type Person = {
   name: string;

@@ -1,4 +1,5 @@
 import MovieDetails from '../../components/MovieDetails.tsx';
+import '../../components/globals.css'
 const MoviePage = () => {
   return (
     <div>

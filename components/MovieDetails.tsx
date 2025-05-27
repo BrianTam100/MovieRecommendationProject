@@ -41,6 +41,8 @@ interface MediaDetails {
   overview: string;
   vote_average: number;
   release_date: number;
+  backdrop_path: string;
+  primary_release_date: string;
 }
 
 interface MediaType {
@@ -158,8 +160,18 @@ const MovieDetails = ({ category }: MediaType) => {
   const { usReleaseDate, usCertification } = releaseDates ? getReleaseInfo(releaseDates) : { usReleaseDate: null, usCertification: null };
 
 
-  return (
-      <div className="min-h-screen p-8 text-white bg-gradient-to-r from-gray-950 via-slate-800 to-gray-950">
+ return (
+  <div
+    className="min-h-screen p-8 text-white relative bg-cover bg-center"
+    style={{
+      backgroundImage: `url(https://image.tmdb.org/t/p/original${details.backdrop_path})`,
+    }}
+  >
+    {/* Dark overlay for contrast */}
+    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-0" />
+
+    {/* Your content container with higher z-index */}
+    <div className="relative z-10">
       <div>
         <button
           className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded"
@@ -168,15 +180,16 @@ const MovieDetails = ({ category }: MediaType) => {
           Home
         </button>
       </div>
-      <h1 className="text-4xl font-bold ml-[20%]">{details.title}</h1>
+      <h1 className="text-4xl font-bold ml-[20%]">{details.title} {details.primary_release_date}</h1>
       <h2 className="text-1xl font-bold ml-[20%]">
-        {usReleaseDate?.slice(0, 10) || details.release_date} | {usCertification} |{" "}
-        {details.genres.map((g) => g.name).join(', ')} |{" "}
+        {usReleaseDate?.slice(0, 10) || details.release_date} | {usCertification} |{' '}
+        {details.genres.map((g) => g.name).join(', ')} |{' '}
         {details.runtime > 0
           ? `${Math.floor(details.runtime / 60)} ${
               Math.floor(details.runtime / 60) > 1 ? 'hours' : 'hour'
             } ${details.runtime % 60 - 1} minutes`
-          : 'Runtime: Unknown'} | Rating: {details.vote_average.toFixed(1)}/10 
+          : 'Runtime: Unknown'}{' '}
+        | Rating: {details.vote_average.toFixed(1)}/10
       </h2>
 
       <div className="ml-[20%]">
@@ -196,49 +209,42 @@ const MovieDetails = ({ category }: MediaType) => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="rounded-lg"
-          ></iframe>
+          />
         </div>
         <p className="w-4/5 text-lg mt-8">{details.overview}</p>
       </div>
-      <div className="ml-[20%]"></div>
       <p className="ml-[20%] m-4">
-      Directed by: 
-      <Link href={`/person/${producer?.id}`} className="text-sky-500 hover:underline ml-1">
-        {producer?.name} 
-      </Link>
+        Directed by:{' '}
+        <Link href={`/person/${producer?.id}`} className="text-sky-500 hover:underline ml-1">
+          {producer?.name}
+        </Link>
       </p>
       <p className="ml-[20%] m-4">
-      Written by:{" "}
-      {unique.slice(0, 3).map((writer, index) => (
-        <span key={writer.id}>
-          <Link
-            href={`/person/${writer.id}`}
-            className="text-sky-500"
-          >
-            {writer.name}
-          </Link>
-          {index < unique.slice(0, 3).length - 1 && " · " }
-        </span>
-      ))}
-    </p>
+        Written by:{' '}
+        {unique.slice(0, 3).map((writer, index) => (
+          <span key={writer.id}>
+            <Link href={`/person/${writer.id}`} className="text-sky-500">
+              {writer.name}
+            </Link>
+            {index < unique.slice(0, 3).length - 1 && ' · '}
+          </span>
+        ))}
+      </p>
 
-    <p className="ml-[20%]">
-      Starring: {" "}
-      {cast.slice(0, 3).map((member, index) => (
-        <span key={member.id}> 
-        <Link
-          href = {`/person/${member.id}`}
-          className = "text-sky-500"
-        >
-        {member.name}
-        </Link>
-        {index < cast.slice(0, 3).length - 1 && " · "}
-        </span>
-      ))}
-    </p>
+      <p className="ml-[20%]">
+        Starring:{' '}
+        {cast.slice(0, 3).map((member, index) => (
+          <span key={member.id}>
+            <Link href={`/person/${member.id}`} className="text-sky-500">
+              {member.name}
+            </Link>
+            {index < cast.slice(0, 3).length - 1 && ' · '}
+          </span>
+        ))}
+      </p>
     </div>
-    
-  );
-};
+  </div>
+);
+}
 
 export default MovieDetails;
