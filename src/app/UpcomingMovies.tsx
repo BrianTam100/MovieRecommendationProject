@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import MovieCarousel from './MovieCarousel';
-import { getReleaseInfo } from "../../components/releaseDate";
 import Link from 'next/link';
 
 type Movie = {
@@ -45,7 +44,6 @@ const UpcomingMovies = () => {
             },
           }
         );
-
         const todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
 
