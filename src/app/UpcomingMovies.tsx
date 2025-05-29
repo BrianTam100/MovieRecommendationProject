@@ -14,15 +14,6 @@ type Movie = {
   vote_count: number;
 };
 
-type ReleaseDate = {
-  iso_3166_1: string;
-  release_dates: {
-    certification: string;
-    note: string;
-    release_date: string;
-  }[];
-};
-
 const UpcomingMovies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const moviesPerPage = 10;
