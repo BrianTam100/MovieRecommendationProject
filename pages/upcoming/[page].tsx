@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import '../../components/globals.css'
 
 type Movie = {
@@ -15,22 +14,13 @@ type Movie = {
   total_pages: number;
 };
 
-type ReleaseDate = {
-  iso_3166_1: string;
-  release_dates: {
-    certification: string;
-    note: string;
-    release_date: string;
-  }[];
-};
+
 
 const AllUpcomingMovies = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
       useEffect(() => {
         const AllUpcoming = async () => {
-            const MovieList: Movie[] = [];
-            let count = 1;
 
             const response = await axios.get<{ results: Movie[] }>('https://api.themoviedb.org/3/movie/upcoming?region=US&page=1',{
             headers: {
