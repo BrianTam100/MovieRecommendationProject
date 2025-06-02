@@ -35,25 +35,23 @@ const UpcomingMovies = () => {
             },
           }
         );
+        console.log(movieRes.data)
         const todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
 
 
         for (const movie of movieRes.data.results) {
-        if(movie.release_date.slice(0, 4) > "2024"){
-        try {
-          if (movie.release_date) {
-          const releaseDate = new Date(movie.release_date);
-          releaseDate.setHours(0, 0, 0, 0);
+          if(movie.release_date.slice(0, 4) > "2024"){
+            console.log(movie.title, movie.release_date)
+              if (movie.release_date) {
+              const releaseDate = new Date(movie.release_date);
+              releaseDate.setHours(0, 0, 0, 0);
 
-          if (releaseDate >= todayMidnight) {
-            filteredMovies.push(movie);
+              if (releaseDate >= todayMidnight) {
+                filteredMovies.push(movie);
+              }
           }
-        }
-            } catch (error) {
-              console.error(`Failed to fetch release dates for movie ${movie.id}:`, error);
-            }
-        }
+          }
         
     }
 
