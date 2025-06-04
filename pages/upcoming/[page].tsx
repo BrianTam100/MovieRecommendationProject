@@ -3,7 +3,7 @@ import axios from "axios";
 import '../../components/globals.css'
 import Image from 'next/image'
 import { useRouter } from 'next/router';
-
+import Link from 'next/link'
 type Movie = {
   id: number;
   title: string;
@@ -62,18 +62,27 @@ const AllUpcomingMovies = () => {
     <h1 className = "ml-[5%] m-5">
       Upcoming Movies
     </h1>
-      <div className=" ml-[5%] grid lg:grid-cols-6 gap-x-5 gap-y-12">
+      <div className=" ml-[5%] grid lg:grid-cols-6 gap-x-5 gap-y-12 mr-[5%]">
         {movies
         .filter((movie) => movie.poster_path) 
         .map((movie) => (
           <div key={movie.id}>
-            <Image
-              src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-              alt={movie.title}
-              width={200}
-              height={300}
-              className="rounded"
-            />
+            <Link href={`/movies/${movie.id}`}>
+              <div className = "relative w-full h-auto group">
+              <Image
+                src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                className="w-full h-auto object-cover rounded"
+                alt={movie.title}
+                width={300} 
+                height={450} 
+              />
+              <div className = "absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent text-white text-left opacity-0 translate-y-4 p-6 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 rounded-b">
+                <p className = "text-lg font-semibold">{movie.title}</p>
+                <p className = "text-sm text-gray-300">{movie.release_date ? movie.release_date.slice(0, 4) : "N/A"}</p>
+
+              </div>
+              </div>
+            </Link>
           </div>
         ))}
 

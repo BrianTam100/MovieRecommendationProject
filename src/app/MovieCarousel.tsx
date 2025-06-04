@@ -39,14 +39,22 @@ const MovieCarousel = ({ movies, moviesPerPage, category }: MovieCarouselProps) 
             style={{ width: 'calc((100% - 9 * 0.5rem) / 10)' }}
           >
             <Link href={`/${category}/${movie.id}`}>
+              <div className = "relative w-full h-auto group">
               <Image
                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                className="w-full h-auto object-cover rounded"
+                className="w-full h-auto object-cover rounded transition-transform duration-350 hover:scale-105 "
                 alt={movie.title}
                 width={300} 
                 height={450} 
               />
+              <div className = "absolute bottom-0 left-0 w-full bg-gradient-to-t from-black to-transparent text-white text-left opacity-0 translate-y-4 p-6 group-hover:opacity-100 group-hover translate-y-0 transition-all duration-300 rounded-b">
+                <p className = "text-lg font-semibold">{movie.title}</p>
+                <p className = "text-sm text-gray-300">{movie.release_date ? movie.release_date.slice(0, 4) : "N/A"}</p>
+
+              </div>
+              </div>
             </Link>
+
           </li>
         ))}
       </ul>
