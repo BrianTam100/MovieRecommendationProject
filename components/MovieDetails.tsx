@@ -161,27 +161,39 @@ const MovieDetails = ({ category }: MediaType) => {
 
 
  return (
+  <div className="relative">
+  <div className="fixed top-0 left-0 w-full h-1/2 z-0">
   <div
-    className="min-h-screen p-8 text-white relative bg-cover bg-center"
+    className="w-full h-full bg-cover bg-center "
     style={{
       backgroundImage: `url(https://image.tmdb.org/t/p/original${details.backdrop_path})`,
     }}
-  >
-    {/* Dark overlay for contrast */}
-    <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-0" />
+  ></div>
+ <div
+  className="absolute inset-0 backdrop-blur-sm"
+  style={{
+    background: 'linear-gradient(to top, rgba(17, 24, 39, 1) 0%, rgba(17, 24, 39, 0.85) 30%, rgba(17, 24, 39, 0.7) 60%, rgba(17, 24, 39, 0.3) 80%, rgba(17, 24, 39, 0) 100%)'
+  }}
+/>
 
-    {/* Your content container with higher z-index */}
-    <div className="relative z-10">
+  </div>
+    <div 
+    className="relative z-10 text-white"
+    style={{
+    background: 'linear-gradient(to bottom, transparent 40vh, rgb(17 24 39) 50vh)',
+          }}
+    >
       <div>
         <button
-          className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded"
+          className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded m-4"
           onClick={() => router.push('/')}
         >
           Home
         </button>
       </div>
-      <h1 className="text-4xl font-bold ml-[20%]">{details.title} {details.primary_release_date}</h1>
-      <h2 className="text-1xl font-bold ml-[20%]">
+      
+      <h1 className="text-4xl font-bold text-white ml-[20%]">{details.title} {details.primary_release_date}</h1>
+      <h2 className="text-1xl font-bold text-white ml-[20%]">
         {usReleaseDate?.slice(0, 10) || details.release_date} | {usCertification} |{' '}
         {details.genres.map((g) => g.name).join(', ')} |{' '}
         {details.runtime > 0
