@@ -13,3 +13,5 @@ The movie data, including titles, posters, and other information, is provided by
 
 This project is not endorsed by TMDb. All images and data are provided by TMDb under their terms and conditions.
 
+
+Streaming availability data from JustWatch
