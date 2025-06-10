@@ -13,6 +13,13 @@ type Actor = {
   department: string;
 };
 
+type Providers = {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
+}
+
 type Genre = {
   name: string;
 };
@@ -60,6 +67,7 @@ const MovieDetails = ({ category }: MediaType) => {
   const [trailer, setTrailer] = useState<{ results: Trailer[] } | null>(null);
   const [producer, setProducer] = useState<Actor | null>(null);
   const { id } = router.query;
+  const [providers, setProviders] = useState<Providers[]>([]);
   
   const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
 
@@ -116,6 +124,17 @@ const MovieDetails = ({ category }: MediaType) => {
       setTrailer(trailerResponse.data);
       console.log('Fetched Trailer', trailerResponse.data);
 
+
+      const providerResponse = await axios.get<{ results: Providers[] }>(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, {
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${API_KEY}`,
+        }
+      });
+
+      setProviders(providerResponse.data.results);
+
+
     };
     
     fetchDetails(); 
@@ -160,6 +179,18 @@ const MovieDetails = ({ category }: MediaType) => {
   const { usReleaseDate, usCertification } = releaseDates ? getReleaseInfo(releaseDates) : { usReleaseDate: null, usCertification: null };
 
 
+
+function formatDate(dateString: string | number | undefined): string {
+  if (!dateString) return 'Unknown';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+ 
+
  return (
   <div className="relative">
   <div className="fixed top-0 left-0 w-full h-1/2 z-0">
@@ -194,14 +225,14 @@ const MovieDetails = ({ category }: MediaType) => {
       
       <h1 className="text-4xl font-bold text-white ml-[20%]">{details.title} {details.primary_release_date}</h1>
       <h2 className="text-1xl font-bold text-white ml-[20%]">
-        {usReleaseDate?.slice(0, 10) || details.release_date} | {usCertification} |{' '}
-        {details.genres.map((g) => g.name).join(', ')} |{' '}
+        {formatDate(usReleaseDate || details.release_date)} · {usCertification} · {' '}
+        {details.genres.map((g) => g.name).join(', ')}  · {' '}
         {details.runtime > 0
           ? `${Math.floor(details.runtime / 60)} ${
               Math.floor(details.runtime / 60) > 1 ? 'hours' : 'hour'
             } ${details.runtime % 60 - 1} minutes`
           : 'Runtime: Unknown'}{' '}
-        | Rating: {details.vote_average.toFixed(1)}/10
+        · Rating: {details.vote_average.toFixed(1)}/10
       </h2>
 
       <div className="ml-[20%]">
@@ -215,7 +246,7 @@ const MovieDetails = ({ category }: MediaType) => {
           />
           <iframe
             width="800"
-            height="700"
+            height="690"
             src={`https://www.youtube.com/embed/${actualTrailer?.key}`}
             title="YouTube trailer"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -223,7 +254,8 @@ const MovieDetails = ({ category }: MediaType) => {
             className="rounded-lg"
           />
         </div>
-        <p className="w-4/5 text-lg mt-8">{details.overview}</p>
+        <p className = "text-bold">Watch on prime video</p>
+        <p className="w-4/5 text-lg mt-16">{details.overview}</p>
       </div>
       <p className="ml-[20%] m-4">
         Directed by:{' '}
