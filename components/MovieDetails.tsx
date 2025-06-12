@@ -273,20 +273,23 @@ function formatDate(dateString: string | number | undefined): string {
             className="rounded-lg"
           />
         </div>
-        
-        <p className = "text-bold flex gap-2">
-          {uniqueProviders.map((provider) => (
+        <p className="text-bold flex gap-2">
+        {uniqueProviders.map((provider, index) => (
+          <div key={provider.provider_id ?? index} className="flex flex-col items-center">
             <Image
-            src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
-            alt={provider.provider_name}
-            width={70}
-            height={70}
-            className="rounded object-contain"
-            unoptimized
-          />
+              src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+              alt={provider.provider_name}
+              width={70}
+              height={70}
+              className="rounded object-contain"
+              unoptimized
+            />
+            {/* Example: show the index number below the logo */}
+            <span className="text-xs text-white mt-1">{index + 1}</span>
+          </div>
+        ))}
+      </p>
 
-          ))}
-          </p>
         <p className="w-4/5 text-lg mt-16">{details.overview}</p>
       </div>
       <p className="ml-[20%] m-4">
