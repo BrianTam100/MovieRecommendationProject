@@ -68,6 +68,7 @@ const MovieDetails = ({ category }: MediaType) => {
   const [producer, setProducer] = useState<Actor | null>(null);
   const { id } = router.query;
   const [providers, setProviders] = useState<Providers[]>([]);
+
   
   const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
 
@@ -124,15 +125,30 @@ const MovieDetails = ({ category }: MediaType) => {
       setTrailer(trailerResponse.data);
       console.log('Fetched Trailer', trailerResponse.data);
 
+      const countryCode = 'US';
 
-      const providerResponse = await axios.get<{ results: Providers[] }>(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, {
+      const providerResponse = await axios.get(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, {
         headers: {
           accept: 'application/json',
           Authorization: `Bearer ${API_KEY}`,
         }
       });
+      const allResults = providerResponse.data.results;
+      const countryProviders = allResults[countryCode] || {};
 
-      setProviders(providerResponse.data.results);
+      const flatrate = countryProviders.flatrate || [];
+      const buy = countryProviders.buy || [];
+      const rent = countryProviders.rent || [];
+
+      const allProviders = [...flatrate, ...buy, ...rent];
+      console.log('All providers:', allProviders);
+      setProviders(allProviders);
+
+ 
+
+
+      
+      
 
 
     };
@@ -142,7 +158,7 @@ const MovieDetails = ({ category }: MediaType) => {
   useEffect(() => {
   const fetchDetails2 = async () => {
     if (!credits || credits.length === 0) return;
-
+``
     const director = credits.find(
       (member) => member.job === "Director" && member.department === "Directing"
     );
@@ -190,7 +206,10 @@ function formatDate(dateString: string | number | undefined): string {
   });
 }
  
-
+      const uniqueProviders = providers.filter(
+    (provider, index, self) =>
+      index === self.findIndex((p) => p.provider_id === provider.provider_id)
+  );
  return (
   <div className="relative">
   <div className="fixed top-0 left-0 w-full h-1/2 z-0">
@@ -254,7 +273,20 @@ function formatDate(dateString: string | number | undefined): string {
             className="rounded-lg"
           />
         </div>
-        <p className = "text-bold">Watch on prime video</p>
+        
+        <p className = "text-bold flex gap-2">
+          {uniqueProviders.map((provider, index) => (
+            <Image
+            src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+            alt={provider.provider_name}
+            width={70}
+            height={70}
+            className="rounded object-contain"
+            unoptimized
+          />
+
+          ))}
+          </p>
         <p className="w-4/5 text-lg mt-16">{details.overview}</p>
       </div>
       <p className="ml-[20%] m-4">
