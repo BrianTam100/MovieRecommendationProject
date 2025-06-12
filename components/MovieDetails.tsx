@@ -158,7 +158,6 @@ const MovieDetails = ({ category }: MediaType) => {
   useEffect(() => {
   const fetchDetails2 = async () => {
     if (!credits || credits.length === 0) return;
-``
     const director = credits.find(
       (member) => member.job === "Director" && member.department === "Directing"
     );
@@ -284,7 +283,6 @@ function formatDate(dateString: string | number | undefined): string {
               className="rounded object-contain"
               unoptimized
             />
-            {/* Example: show the index number below the logo */}
             <span className="text-xs text-white mt-1">{index + 1}</span>
           </div>
         ))}
