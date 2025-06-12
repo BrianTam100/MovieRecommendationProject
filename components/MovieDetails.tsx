@@ -275,7 +275,7 @@ function formatDate(dateString: string | number | undefined): string {
         </div>
         
         <p className = "text-bold flex gap-2">
-          {uniqueProviders.map((provider, index) => (
+          {uniqueProviders.map((provider) => (
             <Image
             src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
             alt={provider.provider_name}
