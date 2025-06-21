@@ -254,7 +254,7 @@ function formatDate(dateString: string | number | undefined): string {
             className="rounded-lg"
           />
         </div>
-        <p className = "text-bold">Watch on prime video</p>
+        <p className = "text-bold"></p>
         <p className="w-4/5 text-lg mt-16">{details.overview}</p>
       </div>
       <p className="ml-[20%] m-4">
