@@ -48,7 +48,6 @@ const AllPopularMovies = () => {
     AllPopular(); 
   }, [pageFromQuery, page]);
   const getPageNumbers = () => {
-    const maxPagesToShow = 5;
     const pages = [];
 
     if(totalPages <= 5){
@@ -57,8 +56,8 @@ const AllPopularMovies = () => {
     }
   }else{
     pages.push(1);
-    let start = Math.max(2, pageFromQuery - 1);
-    let end = Math.max(2, pageFromQuery + 2);
+    const start = Math.max(2, pageFromQuery - 1);
+    const end = Math.max(2, pageFromQuery + 2);
     if(start > 2){
       pages.push("...");
     }
