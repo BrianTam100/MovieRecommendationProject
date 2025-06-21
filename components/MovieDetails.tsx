@@ -205,10 +205,6 @@ function formatDate(dateString: string | number | undefined): string {
   });
 }
  
-      const uniqueProviders = providers.filter(
-    (provider, index, self) =>
-      index === self.findIndex((p) => p.provider_id === provider.provider_id)
-  );
  return (
   <div className="relative">
   <div className="fixed top-0 left-0 w-full h-1/2 z-0">
