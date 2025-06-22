@@ -66,6 +66,7 @@ const MovieDetails = ({ category }: MediaType) => {
   const [releaseDates, setReleaseDates] = useState<ReleaseDate[] | null>(null);
   const [trailer, setTrailer] = useState<{ results: Trailer[] } | null>(null);
   const [producer, setProducer] = useState<Actor | null>(null);
+  const [providers, setProviders] = useState<Providers[]>([]);
   const { id } = router.query;
 
   
@@ -140,14 +141,17 @@ const MovieDetails = ({ category }: MediaType) => {
       const rent = countryProviders.rent || [];
 
       const allProviders = [...flatrate, ...buy, ...rent];
-      console.log('All providers:', allProviders);
 
- 
+      const uniqueProvidersMap = new Map<number, Providers>();
+      for (const provider of allProviders) {
+        if (!uniqueProvidersMap.has(provider.provider_id)) {
+          uniqueProvidersMap.set(provider.provider_id, provider);
+        }
+      }
 
+      const uniqueProviders = Array.from(uniqueProvidersMap.values());
 
-      
-      
-
+      setProviders(uniqueProviders);
 
     };
     
@@ -266,7 +270,25 @@ function formatDate(dateString: string | number | undefined): string {
             className="rounded-lg"
           />
         </div>
-        <p className = "text-bold">Watch on prime video</p>
+        {providers.length > 0 && (
+        <div className=" mt-6">
+          <p className="text-lg font-semibold mb-2"></p>
+          <div className="flex gap-3 overflow-x-auto">
+            {providers.map((provider) => (
+              <div key={provider.provider_id} className="flex flex-col items-center min-w-[60px]">
+                <Image
+                  src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                  alt={provider.provider_name}
+                  width={50}
+                  height={50}
+                />
+                <span className="text-sm text-white text-center mt-1">{provider.provider_name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
         <p className="w-4/5 text-lg mt-16">{details.overview}</p>
       </div>
       <p className="ml-[20%] m-4">

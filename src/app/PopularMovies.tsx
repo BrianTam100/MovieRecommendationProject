@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import MovieCarousel from './MovieCarousel'; // Import the reusable carousel component
+import Link from 'next/link';
 
 type Movie = {
   id: number;
@@ -43,11 +44,15 @@ const PopularMovies = () => {
       <h2 className="text-xl font-semibold text-white">
         Popular Movies
       </h2>
-      <button
-        className="m-1 ml-auto px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white"
-      >
-        View all
-      </button>
+      <div className="ml-auto">
+        <Link href="/popular/1">
+          <button
+            className="m-1 px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            View all
+          </button>
+        </Link>
+      </div>
       </div>
       <MovieCarousel movies={movies} moviesPerPage={moviesPerPage} category="movies" />
     </div>
