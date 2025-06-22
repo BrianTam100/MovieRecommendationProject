@@ -19,46 +19,36 @@ type Movie = {
 
 
 const AllUpcomingMovies = () => {
-  const router = useRouter();
-  const [movies, setMovies] = useState<Movie[]>([]);
+    const router = useRouter();
+    const [movies, setMovies] = useState<Movie[]>([]);
+    const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
+      useEffect(() => {
+        const AllUpcoming = async () => {
+            let allMovies: Movie[] = [];
+            const maxResponse = 10;
 
-  const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
-
-  useEffect(() => {
-    const AllUpcoming = async () => {
-      const allMovies: Movie[] = [];
-      const seen = new Set<number>(); 
-      const maxResponse = 10;
-
-      for (let page = 1; page <= maxResponse; page++) {
-        const response = await axios.get<{ results: Movie[] }>(
-          `https://api.themoviedb.org/3/movie/upcoming?region=US&page=${page}`,
-          {
-            headers: {
+            for(let page = 1; page < maxResponse; ++page){
+              const response = await axios.get<{ results: Movie[]}>(`https://api.themoviedb.org/3/movie/upcoming?region=US&page=${page}`,{
+              headers: {
               accept: 'application/json',
               Authorization: `Bearer ${API_KEY}`,
+              },
+
             }
-          }
-        );
+            );
+            const filtered = response.data.results.filter(movie => {
+            return new Date(movie.release_date) > new Date('2024-12-31');
+            });
 
-        const filtered = response.data.results
-          .filter(movie => new Date(movie.release_date) > new Date('2024-12-31'))
-          .filter(movie => {
-            if (seen.has(movie.id)) {
-              return false;
+            allMovies = allMovies.concat(filtered);
             }
-            seen.add(movie.id);
-            return true;
-          });
+            setMovies(allMovies);
 
-        allMovies.push(...filtered); 
-      }
 
-      setMovies(allMovies);
-    };
+        }
+    AllUpcoming();
+    }, []);
 
-    AllUpcoming(); 
-  }, []);
     return (
     <div className="min-h-screen flex flex-col bg-slate-800 text-white">
       <div>
