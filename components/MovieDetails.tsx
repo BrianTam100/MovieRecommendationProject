@@ -11,6 +11,7 @@ type Actor = {
   id: number;
   job: string;
   department: string;
+  profile_path: string;
 };
 
 type Providers = {
@@ -320,6 +321,28 @@ function formatDate(dateString: string | number | undefined): string {
           </span>
         ))}
       </p>
+      <div className = "ml-[20%]">
+        <p className = "mt-4">
+        Top cast
+        </p>
+    </div>
+    <div className="grid sm:grid-cols-2 gap-6 ml-[20%] mt-4">
+      {cast.slice(0, 10).map((member) => (
+        <div key = {member.id} className = "flex flex-row items-center gap-6">
+          <Image
+          src={`https://image.tmdb.org/t/p/w185${member.profile_path}`}
+          alt={member.name}
+          width={100}
+          height={150}
+          className="rounded-lg object-cover"
+          />
+          <div className="text-white">
+          <p className="font-bold text-lg">{member.name}</p>
+          <p className="text-sm">as {member.character}</p>
+        </div>
+        </div>
+      ))}
+    </div>
     </div>
   </div>
 );
