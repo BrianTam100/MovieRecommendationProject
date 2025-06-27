@@ -1,3 +1,6 @@
+'use client';
+
+
 import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
 import Image from 'next/image'
@@ -5,6 +8,8 @@ import axios from 'axios';
 import './globals.css';
 import Link from 'next/link';
 import { getReleaseInfo } from './releaseDate';
+import SearchBar from './SearchBar';
+
 type Actor = {
   name: string;
   character: string;
@@ -209,6 +214,7 @@ function formatDate(dateString: string | number | undefined): string {
 }
  
  return (
+  
   <div className="relative">
   <div className="fixed top-0 left-0 w-full h-1/2 z-0">
   <div
@@ -231,14 +237,19 @@ function formatDate(dateString: string | number | undefined): string {
     background: 'linear-gradient(to bottom, transparent 40vh, rgb(17 24 39) 50vh)',
           }}
     >
-      <div>
+      <div className = "flex">
         <button
           className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded m-4"
           onClick={() => router.push('/')}
         >
           Home
         </button>
+        <div className = "m-4 ml-[14%]">
+          <SearchBar/>
+        </div>
+
       </div>
+ 
       
       <h1 className="text-4xl font-bold text-white ml-[20%]">{details.title} {details.primary_release_date}</h1>
       <h2 className="text-1xl font-bold text-white ml-[20%]">

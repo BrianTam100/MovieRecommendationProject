@@ -1,6 +1,10 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import {useEffect, useState} from "react";
 import axios from 'axios'
 import Link from 'next/link';
+
 type Movie = {
   id: number;
   original_title: string;
@@ -12,6 +16,8 @@ type Movie = {
 
 
 const SearchBar = () => {
+    const pathname = usePathname();
+
     const [query, setQuery] = useState('');
     const [searchResults, setSearchResults] = useState<Movie[]>([]);
 
@@ -36,9 +42,16 @@ const SearchBar = () => {
     );
   setSearchResults(filteredResults);
   };
-  useEffect(() => {
-  console.log('Updated search results:', searchResults);
-}, [searchResults]);
+    useEffect(() => {
+    console.log('Updated search results:', searchResults);
+    }, [searchResults]);
+    useEffect(() => {
+    setQuery('');
+    setSearchResults([]);
+  }, [pathname]);
+
+
+    
     return (
         <div className="relative w-250"> 
         <form onSubmit={handleSubmit} className = "flex gap-2">
