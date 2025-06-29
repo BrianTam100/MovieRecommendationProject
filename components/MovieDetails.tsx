@@ -28,6 +28,7 @@ type Providers = {
 
 type Genre = {
   name: string;
+  id: string;
 };
 
 type ReleaseDate = {
@@ -56,6 +57,8 @@ interface MediaDetails {
   release_date: number;
   backdrop_path: string;
   primary_release_date: string;
+  original_language: string;
+  id: string;
 }
 
 interface MediaType {
@@ -65,7 +68,6 @@ interface MediaType {
 
 const MovieDetails = ({ category }: MediaType) => {
   const router = useRouter();
-  
   const [details, setDetails] = useState<MediaDetails | null>(null); 
   const [cast, setCast] = useState<Actor[]>([]); 
   const [credits, setCredits] = useState<Actor[]>([]);
@@ -73,6 +75,9 @@ const MovieDetails = ({ category }: MediaType) => {
   const [trailer, setTrailer] = useState<{ results: Trailer[] } | null>(null);
   const [producer, setProducer] = useState<Actor | null>(null);
   const [providers, setProviders] = useState<Providers[]>([]);
+  const [similar, setSimilar] = useState<MediaDetails[] | null>(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+
   const { id } = router.query;
 
   
@@ -159,7 +164,10 @@ const MovieDetails = ({ category }: MediaType) => {
 
       setProviders(uniqueProviders);
 
-    };
+   
+
+
+  };
     
     fetchDetails(); 
   }, [id, category]);
@@ -173,7 +181,27 @@ const MovieDetails = ({ category }: MediaType) => {
     if (!director) return;
     setProducer(director);
     console.log("Director ID being used:", director?.id);
+    const genreIds = details?.genres.map(g => g.id).join(',');
+     console.log("genres", genreIds);
+
+      const discovered = await axios.get(`https://api.themoviedb.org/3/discover/movie`, {
+      params: {
+        with_genres: genreIds,
+        region: 'US',
+        language: 'en-US',
+        sort_by: 'popularity.desc',
+        'primary_release_date.gte': '2023-01-01',
+        'primary_release_date.lte': '2025-12-31',
+      },
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    });
+
+    const similarMovies = discovered.data.results.filter((m: MediaDetails) => m.id !== details?.id && m.original_language === 'en');
+    setSimilar(similarMovies);
+    console.log("similar", similarMovies);
+
   };
+    
 
   fetchDetails2();
 }, [credits]);
@@ -273,9 +301,10 @@ function formatDate(dateString: string | number | undefined): string {
             height={450}
           />
           <iframe
+            key={actualTrailer?.key}
             width="800"
             height="690"
-            src={`https://www.youtube.com/embed/${actualTrailer?.key}`}
+            src={`https://www.youtube.com/embed/${actualTrailer?.key}?rel=0&modestbranding=1&enablejsapi=1`}
             title="YouTube trailer"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -355,6 +384,24 @@ function formatDate(dateString: string | number | undefined): string {
         </div>
         </div>
       ))}
+    </div>
+    
+
+    <div className = " flex">
+      Similar Movies
+      {similar?.slice(0, 20).map((movie => (
+      <div key = {movie.title} className = "text-white">
+        <Link href = {`/movies/${movie.id}`}>
+        <Image
+        src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
+        alt={movie.title}
+        width={200}
+        height={300}
+        className="rounded-lg object-cover"
+        />
+        </Link>
+      </div>
+      )))}
     </div>
     </div>
   </div>
