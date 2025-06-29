@@ -40,14 +40,6 @@ const PersonDetails = () => {
         console.log(personDetails)
         
 
-        const movieCredits = await axios.get<MovieCreditsResponse>(`https://api.themoviedb.org/3/person/${id}/movie_credits`, {
-              headers: {
-                accept: 'application/json',
-                 Authorization: `Bearer ${API_KEY}`,
-
-              },
-            });
-
         }
     fetchDetails();
   }, [id]);
