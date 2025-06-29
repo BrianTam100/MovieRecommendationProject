@@ -20,7 +20,7 @@ const PopularMovies = () => {
   useEffect(() => {
     const fetchUpcomingMovies = async () => {
       try {
-        const response = await axios.get('https://api.themoviedb.org/3/tv/top_rated', {
+        const response = await axios.get('https://api.themoviedb.org/3/tv/popular', {
           headers: {
             accept: 'application/json',
             Authorization: `Bearer ${API_KEY}`, 

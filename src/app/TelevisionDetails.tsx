@@ -126,7 +126,16 @@ return (
         <p className="mb-6">{details.overview}</p>
       </div>
     </div>
+    
 
+    <div className = "ml-[20%] m-6">
+      <h1 className = "text-xl font-bold">
+        Seasons
+        <select>
+          
+        </select>
+      </h1>
+    </div>
     <h2 className="mt-12 ml-[20%] text-xl font-bold">Top Cast</h2>
     <div className="flex ml-[20%] gap-8 mt-4">
       {cast.slice(0, 3).map((member) => (

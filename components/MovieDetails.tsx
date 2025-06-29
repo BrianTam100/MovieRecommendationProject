@@ -348,7 +348,9 @@ function formatDate(dateString: string | number | undefined): string {
           className="rounded-lg object-cover"
           />
           <div className="text-white">
-          <p className="font-bold text-lg">{member.name}</p>
+          <Link href = {`/person/${member.id}`}>
+          <p className="font-bold text-lg text-sky-500">{member.name}</p>
+          </Link>
           <p className="text-sm">as {member.character}</p>
         </div>
         </div>
