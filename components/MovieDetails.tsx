@@ -76,7 +76,6 @@ const MovieDetails = ({ category }: MediaType) => {
   const [producer, setProducer] = useState<Actor | null>(null);
   const [providers, setProviders] = useState<Providers[]>([]);
   const [similar, setSimilar] = useState<MediaDetails[] | null>(null);
-  const [showTrailer, setShowTrailer] = useState(false);
 
   const { id } = router.query;
 
