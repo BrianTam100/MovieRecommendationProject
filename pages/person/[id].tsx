@@ -47,8 +47,7 @@ const PersonDetails = () => {
 
               },
             });
-        setCredits(movieCredits.data.cast);
-        console.log(movieCredits);
+
         }
     fetchDetails();
   }, [id]);
