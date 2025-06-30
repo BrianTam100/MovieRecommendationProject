@@ -138,7 +138,7 @@ const MovieFinder = () => {
 
         <div className = "ml-20 m-10 bg-blue-500"> 
             {movies?.map((movie) => (
-            <div key={movie.id} className="flex bg-white text-black p-4 rounded-lg shadow-md">
+            <div key={movie.id} className="flex bg-slate-700 text-black p-4 rounded-lg shadow-md">
                 <Link href = {`/movies/${movie.id}`}>
                 <Image
                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
