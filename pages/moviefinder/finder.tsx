@@ -4,6 +4,8 @@ import axios from 'axios';
 import Image from 'next/image'
 import Link from "next/link"
 import Pagination from '../../components/Pagination'
+import { useRouter } from 'next/router';
+
 type Genre = {
   name: string;
   id: string;
@@ -32,8 +34,9 @@ const MovieFinder = () => {
     { name: 'Horror', id: 27 },
     { name: 'Science Fiction', id: 878 },
     { name: 'Romance', id: 10749 },
+    { name: 'Science Fiction', id: 878},
     ];
-
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [movies, setMovies] = useState<MediaDetails[] | null>(null); 
     const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
@@ -78,7 +81,13 @@ const MovieFinder = () => {
 
     return (
         <div className = "bg-blue-500 min-h-screen">
-        <div className = "">
+        <div>
+        <button
+          className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded m-4"
+          onClick={() => router.push('/')}
+        >
+          Home
+        </button>
 
         <div className="relative w-full max-w-md">
         <button
