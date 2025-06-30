@@ -3,7 +3,7 @@ import '../../components/globals.css'
 import axios from 'axios';
 import Image from 'next/image'
 import Link from "next/link"
-
+import Pagination from '../../components/Pagination'
 type Genre = {
   name: string;
   id: string;
@@ -37,25 +37,34 @@ const MovieFinder = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [movies, setMovies] = useState<MediaDetails[] | null>(null); 
     const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
 
     useEffect(() => {
   const findMovies = async () => {
-    const discovered = await axios.get(`https://api.themoviedb.org/3/discover/movie`, {
+    const response = await axios.get(`https://api.themoviedb.org/3/discover/movie`, {
       params: {
-        with_genres: selectedGenreIds.join(','), 
+        with_genres: selectedGenreIds.join(','),
         sort_by: 'popularity.desc',
-        },
-        headers: { Authorization: `Bearer ${API_KEY}` },
-        });
-        setMovies(discovered.data.results.filter((m: MediaDetails) => m.original_language === 'en'));
-    };
+        page,
+      },
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    });
 
-    if (selectedGenreIds.length > 0) {
-        findMovies();
-    }
-    }, [selectedGenreIds]); 
+    setMovies(response.data.results.filter((m: MediaDetails) => m.original_language === 'en'));
+    setTotalPages(response.data.total_pages);
+  };
+
+  if (selectedGenreIds.length > 0) {
+    findMovies();
+  } else {
+    setMovies(null);
+    setTotalPages(1);
+  }
+}, [selectedGenreIds, page]);
+
 
     const toggleGenre = (id: number) => {
     setSelectedGenreIds((prev) =>
@@ -101,7 +110,7 @@ const MovieFinder = () => {
         <div className = "ml-20 m-10 bg-blue-500">
             Movies
             {movies?.map((movie) => (
-            <div key={movie.id} className="bg-white text-black p-4 rounded-lg shadow-md">
+            <div key={movie.id} className="flex bg-white text-black p-4 rounded-lg shadow-md">
                 <Link href = {`/movies/${movie.id}`}>
                 <Image
                 src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
@@ -113,9 +122,16 @@ const MovieFinder = () => {
                 </Link>
             </div>
             ))}
+        {selectedGenreIds.length > 0 && totalPages > 1 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      )}
         </div>
         </div>
-
+        
         </div>
     )
 };
