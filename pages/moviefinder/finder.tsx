@@ -39,6 +39,8 @@ const MovieFinder = () => {
     const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [startYear, setStartYear] = useState(2020);
+    const [endYear, setEndYear] = useState(2025);
 
     const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDI0MmE0OTFmZTAzNzc2NzNhODg0YzQ3ODM0NWQzZiIsIm5iZiI6MTc0MzI3MTEwNi44MDcwMDAyLCJzdWIiOiI2N2U4MzRjMmYxZjUzNzY4NzVkZGM5MTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.U6GroeQplHcTJBZxSZE1D63cRNPZNZDr7ordhOIoSCM';
 
@@ -48,6 +50,8 @@ const MovieFinder = () => {
       params: {
         with_genres: selectedGenreIds.join(','),
         sort_by: 'popularity.desc',
+        'primary_release_date.gte': `${startYear}-01-01`,
+        'primary_release_date.lte': `${endYear}-12-31`,
         page,
       },
       headers: { Authorization: `Bearer ${API_KEY}` },
@@ -74,7 +78,7 @@ const MovieFinder = () => {
 
     return (
         <div className = "bg-blue-500 min-h-screen">
-        <div className = "flex">
+        <div className = "">
 
         <div className="relative w-full max-w-md">
         <button
@@ -107,8 +111,32 @@ const MovieFinder = () => {
           </div>
         )}
         </div>
-        <div className = "ml-20 m-10 bg-blue-500">
-            Movies
+        <div className="space-x-4 items-center ml-4 mt-50">
+        <label>
+            Start Year: 
+            <input
+            type="number"
+            min="1900"
+            max={new Date().getFullYear()}
+            value={startYear}
+            onChange={(e) => setStartYear(Number(e.target.value))}
+            className="ml-2 rounded px-2 py-1 text-black w-20"
+            />
+        </label>
+        <label>
+            End Year: 
+            <input
+            type="number"
+            min={startYear}
+            max={new Date().getFullYear() + 5}
+            value={endYear}
+            onChange={(e) => setEndYear(Number(e.target.value))}
+            className="ml-2 rounded px-2 py-1 text-black w-20"
+            />
+        </label>
+        </div>
+
+        <div className = "ml-20 m-10 bg-blue-500"> 
             {movies?.map((movie) => (
             <div key={movie.id} className="flex bg-white text-black p-4 rounded-lg shadow-md">
                 <Link href = {`/movies/${movie.id}`}>
