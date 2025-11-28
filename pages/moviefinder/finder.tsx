@@ -79,98 +79,122 @@ const MovieFinder = () => {
     );
     };
 
-    return (
-        <div className = "bg-blue-500 min-h-screen">
-        <div>
-        <button
-          className="bg-white hover:bg-sky-400 text-gray-700 font-bold py-2 px-4 rounded m-4"
-          onClick={() => router.push('/')}
-        >
-          Home
-        </button>
+   return (
+  <div className="min-h-screen bg-gradient-to-br from-[#0A84FF] to-[#4AC7FF] p-8">
 
-        <div className="relative w-full max-w-md">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-full bg-orange-500 text-black px-4 py-2 rounded-lg shadow-md m-4"
-        >
-          {selectedGenreIds.length > 0
-            ? genreMap
-                .filter((genre) => selectedGenreIds.includes(genre.id))
-                .map((g) => g.name)
-                .join(', ')
-            : 'Choose genres'}
+    {/* Header */}
+    <button
+      className="
+        bg-white/20 backdrop-blur-xl text-white
+        px-5 py-2 rounded-xl shadow-md
+        hover:bg-white/30 transition
+      "
+      onClick={() => router.push('/')}
+    >
+      Home
+    </button>
 
-        </button>
-        {isOpen && (
-          <div className="absolute mt-2 w-full bg-slate-500 text-black border rounded-lg shadow-lg max-h-64 overflow-y-auto z-10 ml-4">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-4 ml-4">
-              {genreMap.map((genre) => (
-            <label key={genre.id} className="flex items-center space-x-2">
+    {/* Genre Dropdown */}
+    <div className="relative w-full max-w-lg mx-auto mt-10">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="
+          w-full bg-white/10 backdrop-blur-xl
+          text-white px-4 py-3 rounded-2xl
+          shadow-lg hover:bg-white/20 transition
+        "
+      >
+        {selectedGenreIds.length > 0
+          ? genreMap
+              .filter((g) => selectedGenreIds.includes(g.id))
+              .map((g) => g.name)
+              .join(', ')
+          : 'Choose genres'}
+      </button>
+
+      {isOpen && (
+        <div
+          className="
+            absolute mt-2 w-full bg-white/10 backdrop-blur-xl
+            border border-white/20 text-white
+            shadow-xl rounded-2xl p-4
+            max-h-64 overflow-y-auto z-10
+          "
+        >
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-4">
+            {genreMap.map((genre) => (
+              <label key={genre.id} className="flex items-center gap-2">
                 <input
-                type="checkbox"
-                checked={selectedGenreIds.includes(genre.id)}
-                onChange={() => toggleGenre(genre.id)}
+                  type="checkbox"
+                  checked={selectedGenreIds.includes(genre.id)}
+                  onChange={() => toggleGenre(genre.id)}
+                  className="accent-white"
                 />
                 <span>{genre.name}</span>
-            </label>
+              </label>
             ))}
-
-            </div>
           </div>
-        )}
         </div>
-        <div className="space-x-4 items-center ml-4 mt-50">
-        <label>
-            Start Year: 
-            <input
-            type="number"
-            min="1900"
-            max={new Date().getFullYear()}
-            value={startYear}
-            onChange={(e) => setStartYear(Number(e.target.value))}
-            className="ml-2 rounded px-2 py-1 text-black w-20"
-            />
-        </label>
-        <label>
-            End Year: 
-            <input
-            type="number"
-            min={startYear}
-            max={new Date().getFullYear() + 5}
-            value={endYear}
-            onChange={(e) => setEndYear(Number(e.target.value))}
-            className="ml-2 rounded px-2 py-1 text-black w-20"
-            />
-        </label>
-        </div>
-
-        <div className = "ml-20 m-10 bg-blue-500"> 
-            {movies?.map((movie) => (
-            <div key={movie.id} className="flex bg-slate-700 text-black p-4 rounded-lg shadow-md">
-                <Link href = {`/movies/${movie.id}`}>
-                <Image
-                src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-                alt={movie.title}
-                className="w-3/5 max-w-md rounded-lg object-cover"
-                width={300}
-                height={450}
-                />
-                </Link>
-            </div>
-            ))}
-        {selectedGenreIds.length > 0 && totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={(newPage) => setPage(newPage)}
-        />
       )}
-        </div>
-        </div>
-        
-        </div>
-    )
+    </div>
+
+    {/* Years */}
+    <div className="flex gap-12 justify-center mt-10 text-white font-medium">
+      <label>
+        Start Year:
+        <input
+          type="number"
+          min="1900"
+          value={startYear}
+          onChange={(e) => setStartYear(Number(e.target.value))}
+          className="ml-2 px-3 py-1.5 rounded-xl bg-white/20 backdrop-blur-xl text-white w-24 shadow-inner focus:outline-none focus:ring-2 focus:ring-white/50"
+        />
+      </label>
+
+      <label>
+        End Year:
+        <input
+          type="number"
+          min={startYear}
+          value={endYear}
+          onChange={(e) => setEndYear(Number(e.target.value))}
+          className="ml-2 px-3 py-1.5 rounded-xl bg-white/20 backdrop-blur-xl text-white w-24 shadow-inner focus:outline-none focus:ring-2 focus:ring-white/50"
+        />
+      </label>
+    </div>
+
+    {/* Movie Grid */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 max-w-7xl mx-auto">
+      {movies?.map((movie) => (
+        <Link key={movie.id} href={`/movies/${movie.id}`}>
+          <div className="
+            bg-white/10 backdrop-blur-xl border border-white/20
+            p-4 rounded-2xl shadow-xl
+            hover:shadow-2xl hover:scale-[1.02] transition cursor-pointer
+          ">
+            <Image
+              src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+              alt={movie.title}
+              width={300}
+              height={450}
+              className="rounded-xl shadow-lg w-full object-cover"
+            />
+          </div>
+        </Link>
+      ))}
+    </div>
+
+    {selectedGenreIds.length > 0 && totalPages > 1 && (
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={(newPage) => setPage(newPage)}
+      />
+    )}
+
+  </div>
+);
+
 };
 
 

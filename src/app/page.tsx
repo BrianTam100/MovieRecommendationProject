@@ -12,13 +12,15 @@
 
     return (
     <div className="min-h-screen flex flex-col bg-slate-900 text-white">
-    <header>
+
+    <nav>
       <h1 className="text-5xl mb-4 text-white text-center m-16">Watchlist++</h1>
+
+    </nav>
       <div className="flex mb-8 px-4">
         <SearchBar/>
         <MovieFinder/>
       </div>
-    </header>
     <div className = "mx-auto max-w-380 px-4">
       <div className="flex bg-grey-800 mb-8">
       <UpcomingMovies />
